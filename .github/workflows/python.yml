@@ -1,0 +1,65 @@
+name: Notifications CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python3.(7/8/9)
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.version }}
+      - name: Create reports dir
+        run: |
+          mkdir -p reports/mypy_reports
+          mkdir -p reports/flake8_reports
+      - name: Install MyPy & flake8
+        run: |
+          pip3 install lxml==4.9.1
+          pip3 install mypy==0.971
+          pip3 install wemake-python-styleguide==0.16.1
+          pip3 install flake8-html
+      - name: Run mypy
+        run: |
+          mypy event_handler/ --ignore-missing-imports --no-strict-optional --html-report reports/mypy_reports
+          
+      - name: Run flake8
+        run: |
+          flake8 event_handler/ --ignore=WPS,B008,B902,C812 --show-source
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: CI report
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 0 
+          
+
+  send_message:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [tests]
+    steps:
+    - name: send message
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          Repository: ${{ github.repository }}
+          Author: ${{ github.actor }}
+          Tests result: ${{ needs.tests.result }}
+          Commit message: ${{ github.event.commits[0].message }}          
+          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
