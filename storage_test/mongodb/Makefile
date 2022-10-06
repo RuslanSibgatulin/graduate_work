@@ -19,11 +19,10 @@ status:  ## Get docker containers status
 
 init:  ## Configure Mongo cluster and create database UGC_data
 		./rs-init.sh
-		sleep 5
 		./db-init.sh
 
 full-test:  ## Run full tests
-		pytest ./tests/views_test.py -vvs --durations=0
+		pytest ./tests/views_test.py -v --durations=0
 
 read-tests:  ## Run read only tests
 		pytest ./tests/views_test.py -v -k 'not insert' --durations=0
