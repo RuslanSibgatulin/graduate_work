@@ -37,18 +37,46 @@ async def test_insert_users_with_views(
 
 @pytest.mark.parametrize(
     "attempt",
-    range(20)
+    range(10)
 )
 async def test_user_views_similarity(
     mongo_db, get_random_user_views, get_users_views_count, attempt
 ):
     user_views = get_random_user_views
     pprint(f"Get random user profile from {get_users_views_count} docs")
-    pprint(user_views)
+    pprint(f"User profile: {user_views}")
     cursor = mongo_db["views"].aggregate([
         {
             "$match": {
                 "viewed": {"$in": user_views}
+            }
+        },
+        {
+            "$project":
+            {
+                "viewed": 1,
+                "similarity":
+                {
+                    "$divide":
+                    [
+                        {
+                            "$size":
+                            {
+                                "$setIntersection":
+                                [
+                                    "$viewed",
+                                    user_views
+                                ]
+                            }
+                        },
+                        len(user_views)
+                    ]
+                }
+            }
+        },
+        {
+            "$match": {
+                "similarity": {"$gte": 0.5}
             }
         },
         {
@@ -66,4 +94,5 @@ async def test_user_views_similarity(
     ])
     document = await cursor.to_list(length=1)
     offer = document[0]["offer"]
+    pprint(f"Offer: {offer}")
     assert not (set(user_views) & set(offer))
