@@ -25,5 +25,5 @@ full-test:  ## Run full tests
 		pytest ./tests/views_test.py -v --durations=0
 
 read-tests:  ## Run read only tests
-		pytest ./tests/views_test.py -v -k 'not insert' --durations=0
+		pytest ./tests/views_test.py -vs -k 'not insert and not update' --durations=0
 

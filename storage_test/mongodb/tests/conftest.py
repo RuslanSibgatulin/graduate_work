@@ -1,18 +1,27 @@
 import asyncio
 from uuid import uuid4
 
+import pandas
 import pytest_asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 def users_list():
     return [str(uuid4()) for _ in range(100000)]
 
 
 @pytest_asyncio.fixture(scope="session")
-def movies_list():
-    return [str(uuid4()) for _ in range(100000)]
+def pandas_movies():
+    return pandas.read_csv("data/movies.csv", index_col="movieId")
+
+
+@pytest_asyncio.fixture(scope="function")
+def movies_by_genre(pandas_movies, genre):
+    filtred = list(
+        pandas_movies[pandas_movies["genres"].str.contains(genre)].index
+    )
+    return filtred
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -29,11 +38,10 @@ async def mongo_db():
     yield db
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def get_random_user_views(mongo_db):
     cursor = mongo_db['views'].aggregate(
         [
-            {"$limit": 1000},
             {"$sample": {"size": 1}}
         ]
     )
