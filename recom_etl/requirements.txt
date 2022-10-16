@@ -1,0 +1,5 @@
+aiokafka==0.7.2
+pydantic==1.10.2
+orjson==3.7.12
+python-logstash-async==2.5.0
+aioredis==2.0.1
