@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import logging.config
-from typing import Any, Dict, Optional
+from typing import Any, List, Optional
 
 import orjson
 from aiokafka import AIOKafkaConsumer, TopicPartition
@@ -21,6 +21,17 @@ class EventsHandler:
         self.redis = redis
         self.kafka_url = kafka_url
         self.config = events_registry
+        self.prepare()
+
+    def prepare(self) -> None:
+        for topic in self.config:
+            handlers_classes = self.config[topic].get("handlers", [])
+            self.config[topic]["instances"] = [
+                handler_class() for handler_class in handlers_classes
+            ]
+
+    def get_handlers(self, topic) -> List[Any]:
+        return self.config[topic]["instances"]
 
     async def consume(self, topic: str) -> None:
         logger.info("Consume topic %s", topic)
@@ -42,9 +53,9 @@ class EventsHandler:
                 context = self.transform(msg)
                 if not context:
                     continue
-                handlers = self.config.get(topic, {}).get("handlers", [])
-                for handler in handlers:  # Exec all assigned handlers
-                    await handler(topic)(context)
+                # Exec all assigned handlers
+                for handler in self.get_handlers(topic):
+                    await handler.load(context)
                 await self.save_offset(topic, msg)
         finally:
             await self.redis.close()

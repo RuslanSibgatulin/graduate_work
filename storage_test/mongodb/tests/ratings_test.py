@@ -10,7 +10,7 @@ pytestmark = pytest.mark.asyncio
 @pytest.mark.parametrize(
     "count,genre",
     [
-        (10, "Action")
+        (1000, "Action")
     ]
 )
 async def test_update_ratings(
@@ -20,10 +20,11 @@ async def test_update_ratings(
 
     users_with_likes = random.choices(users_list, k=count)
     users_likes = [None, 5, 4, 3]
-    result = await mongo_db["ratings"].insert_many(
+    result = await mongo_db["profiles"].insert_many(
         [
             {
                 "user_id": user,
+
                 "ratings": dict(
                     [
                         (
@@ -39,3 +40,63 @@ async def test_update_ratings(
 
     # Проверка результата
     assert len(result.inserted_ids) == count
+
+
+    """
+db('UGC_data').collection('profiles').aggregate(
+[
+  {"$project": {"liked": {"$objectToArray": "$viewed"}}},
+  {"$match": {"liked.k": {"$in": ["438", "688", "4159", "502"]}}},
+  {
+            "$project":
+            {
+                "liked.k": 1,
+              	"liked.v": 1,
+                "similarity":
+                {
+                    "$divide":
+                    [
+                        {
+                            "$size":
+                            {
+                                "$setIntersection":
+                                [
+                                    "$liked.k",
+                                    ["438", "688", "4159", "502"]
+                                ]
+                            }
+                        },
+                        4
+                    ]
+                }
+            }
+        },
+  {
+            "$sort": {
+                "similarity": -1
+            }
+        },
+ {
+            "$limit": 10
+        },
+        {
+            "$unwind": "$liked"
+        },
+        {
+            "$match": {"liked.k": {"$nin": ["438", "688", "4159", "502"]}}
+        },
+        {
+            "$sample": {"size": 50}
+        },
+  {
+            "$group": {"_id": "null", "movies": {"$addToSet": "$liked.k"}}
+        },
+        {
+            "$project": {"_id": 0, "offer": "$movies"}
+        }
+
+        
+]
+).toArray()
+
+    """

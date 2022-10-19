@@ -24,11 +24,22 @@ class RedisSettings(BaseSettings):
         )
 
 
+class MongoSettings(BaseSettings):
+    MONGO_HOST: str = "127.0.0.1"
+    MONGO_PORT: int = 27019
+    MONGO_DB: str = "recommendations"
+
+    @property
+    def mongo_uri(self) -> str:
+        return f"mongodb://{self.MONGO_HOST}:{self.MONGO_PORT}"
+
+
 class LogstashSettings(BaseSettings):
     LOGSTASH_HOST: str = "localhost"
     LOGSTASH_PORT: int = 5044
 
 
+mongo_settings = MongoSettings()
 redis_settings = RedisSettings()
 logstash_settings = LogstashSettings()
 kafka_settings = KafkaSettings()
