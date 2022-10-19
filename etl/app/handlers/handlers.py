@@ -24,12 +24,12 @@ class UserViewsHandler(BaseHandlerMongo):
         super().__init__(event)
 
     async def load(self, context: ViewEvent) -> None:
-        """Save movie as viewed only if progress percent equal to 80, 90 or 100%
+        """Save movie as viewed only if progress percent larger than 80%
         Args:
             context (ViewEvent): Event data
         """
-        div, mod = divmod(context.percent, 1)
-        if mod == 0 and div in [8, 9, 10]:
+        div, mod = divmod(context.percent, 10)
+        if mod == 0 and div > 8:
             logger.info(
                 "Movie %s viewed by user %s: progress %s on event <%s>",
                 context.movie_id,
