@@ -7,7 +7,7 @@ from db.redis import RedisCache
 from handlers.events_handler import EventsHandler
 
 logging.config.dictConfig(LOGGING)
-logger = logging.getLogger("Events-Handler")
+logger = logging.getLogger("Recom-ETL")
 
 
 if __name__ == "__main__":

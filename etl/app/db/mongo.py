@@ -1,7 +1,6 @@
 import logging
 
 from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo import ReturnDocument
 
 logger = logging.getLogger(__name__)
 

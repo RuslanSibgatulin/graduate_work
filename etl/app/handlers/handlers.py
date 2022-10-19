@@ -24,9 +24,14 @@ class UserViewsHandler(BaseHandlerMongo):
         super().__init__(event)
 
     async def load(self, context: ViewEvent) -> None:
-        if 85 < context.percent//1 < 90:
+        """Save movie as viewed only if progress percent equal to 80, 90 or 100%
+        Args:
+            context (ViewEvent): Event data
+        """
+        div, mod = divmod(context.percent, 1)
+        if mod == 0 and div in [8, 9, 10]:
             logger.info(
-                "Movie %s user %s progress %s on event <%s>",
+                "Movie %s viewed by user %s: progress %s on event <%s>",
                 context.movie_id,
                 context.user_id,
                 context.percent,
@@ -41,11 +46,11 @@ class MovieLikeHandler(BaseHandlerMongo):
 
     async def load(self, context: LikeEvent) -> None:
         logger.info(
-                "Like %s by user %s on movie %s",
-                context.score,
-                context.user_id,
-                context.movie_id
-            )
+            "Movie %s is rated at %s by user %ss",
+            context.movie_id,
+            context.score,
+            context.user_id,
+        )
         await self.add_movie_to_profile(
             context.user_id,
             context.movie_id,

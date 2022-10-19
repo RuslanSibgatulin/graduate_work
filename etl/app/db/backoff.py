@@ -1,9 +1,9 @@
+import asyncio
 import logging
-import time
 from functools import wraps
 
 
-def backoff(
+def aiobackoff(
     _caller: str,
     _logger: logging.Logger = None,
     start_sleep_time=0.1,
@@ -31,7 +31,7 @@ def backoff(
     else:
         log = logging.getLogger()
 
-    def waiting(attempt: int):
+    async def waiting(attempt: int):
         delay = start_sleep_time * pow(factor, attempt)
         if delay > border_sleep_time:
             delay = border_sleep_time
@@ -39,19 +39,19 @@ def backoff(
             "Attempt %d in <%s>. Retry after %s sec",
             attempt, _caller, delay
         )
-        time.sleep(delay)
+        await asyncio.sleep(delay)
 
     def func_wrapper(func):
         @wraps(func)
-        def inner(*args, **kwargs):
+        async def inner(*args, **kwargs):
             """Выполнить декорируемую функцию с ее параметрами"""
             attempt = 1
             while True:
                 try:
-                    return func(*args, **kwargs)
+                    return await func(*args, **kwargs)
                 except BaseException as err:
                     log.error("%s", err)
-                    waiting(attempt)
+                    await waiting(attempt)
                     # if attempt == 10:
                     #     break
                     attempt += 1

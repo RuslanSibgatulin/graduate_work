@@ -1,5 +1,5 @@
-from handlers.handlers import UserViewsHandler, MovieLikeHandler
-from models.models import ViewEvent, LikeEvent
+from handlers.handlers import MovieLikeHandler, UserViewsHandler
+from models.models import LikeEvent, ViewEvent
 
 events_config = {
     "views": {

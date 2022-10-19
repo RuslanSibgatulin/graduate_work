@@ -6,6 +6,7 @@ from typing import Any, List, Optional
 import orjson
 from aiokafka import AIOKafkaConsumer, TopicPartition
 from aiokafka.structs import ConsumerRecord
+from db.backoff import aiobackoff
 from db.redis import RedisCache
 
 logger = logging.getLogger(__name__)
@@ -27,12 +28,16 @@ class EventsHandler:
         for topic in self.config:
             handlers_classes = self.config[topic].get("handlers", [])
             self.config[topic]["instances"] = [
-                handler_class() for handler_class in handlers_classes
+                handler_class(topic) for handler_class in handlers_classes
             ]
 
     def get_handlers(self, topic) -> List[Any]:
         return self.config[topic]["instances"]
 
+    def get_model(self, topic) -> Any:
+        return self.config.get(topic, {}).get("model", None)
+
+    @aiobackoff("Kafka.consume", logger)
     async def consume(self, topic: str) -> None:
         logger.info("Consume topic %s", topic)
         consumer = AIOKafkaConsumer(
@@ -73,7 +78,7 @@ class EventsHandler:
 
     def transform(self, event: ConsumerRecord) -> Optional[Any]:
         obj = event.value | {"event_time": event.timestamp // 1000}
-        model = self.config.get(event.topic, {}).get("model", None)
+        model = self.get_model(event.topic)
         if model:
             return model.parse_obj(obj)
 
