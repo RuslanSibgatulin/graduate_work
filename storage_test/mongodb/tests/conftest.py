@@ -13,7 +13,7 @@ def users_list():
 
 @pytest_asyncio.fixture(scope="session")
 def pandas_movies():
-    return pandas.read_csv("data/movies.csv", index_col="movieId")
+    return pandas.read_csv("../data/movies.csv", index_col="movieId")
 
 
 @pytest_asyncio.fixture(scope="function")
