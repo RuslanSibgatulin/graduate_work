@@ -37,7 +37,11 @@ class UserViewsHandler(BaseHandlerMongo):
                 context.percent,
                 self.event
             )
-            await self.add_movie_to_profile(context.user_id, context.movie_id)
+            await self.add_view_to_profile(
+                context.user_id,
+                context.movie_id,
+                context.event_time
+            )
 
 
 class MovieLikeHandler(BaseHandlerMongo):
@@ -51,7 +55,7 @@ class MovieLikeHandler(BaseHandlerMongo):
             context.score,
             context.user_id,
         )
-        await self.add_movie_to_profile(
+        await self.add_like_to_profile(
             context.user_id,
             context.movie_id,
             context.score
