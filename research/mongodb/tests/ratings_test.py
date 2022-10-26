@@ -1,5 +1,4 @@
 import random
-from pprint import pprint
 
 import pytest
 from pymongo import ReturnDocument

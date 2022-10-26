@@ -34,7 +34,7 @@ def event_loop():
 @pytest_asyncio.fixture(scope="session")
 async def mongo_db():
     client = AsyncIOMotorClient('localhost', 27019)
-    db = client['UGC_data']
+    db = client['RecomDB']
     yield db
 
 
