@@ -11,7 +11,7 @@ services:
       context: ..
       dockerfile: docker/dockerfiles/DockerfileRecomETL
     env_file: envs/etl.env
-    # depends_on:
-    #   - broker
-    #   - redis
-    #   - mongo
+    external_links:
+      - broker
+      - redis
+      - mongo
