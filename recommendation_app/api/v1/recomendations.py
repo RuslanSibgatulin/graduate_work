@@ -39,7 +39,7 @@ async def get_base_movies(
     response_model=list[Movie],
     status_code=status.HTTP_200_OK,
 )
-async def get_base_movies(
+async def get_model_movies(
         user_info: dict = Security(get_genres_and_validate),
         service: MoviesService = Depends(get_movies_service)
 ) -> list[Movie]:
