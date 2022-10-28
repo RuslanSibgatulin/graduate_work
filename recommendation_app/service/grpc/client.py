@@ -7,7 +7,7 @@ import service.grpc.proto.recommender_pb2_grpc as recommender_pb2_grpc
 
 class GRPCModelClient:
     @classmethod
-    async def get_movies(cls, user_id: str, movies_list: list[str]) -> list[str]:
+    async def get_movies(cls, user_id: str, movies_list: list[str]) -> recommender_pb2.GetRecommendationsResponse:
         async with grpc.aio.insecure_channel(config.GRPC_ADDR) as channel:
             stub = recommender_pb2_grpc.MoviesRecommenderStub(channel)
             response = await stub.GetRecommendations(

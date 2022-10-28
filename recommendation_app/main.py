@@ -1,9 +1,9 @@
 import uvicorn
-from db import mongo
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from api.v1.recomendations import router as recommendation_router
+from db import mongo
 
 
 app = FastAPI(

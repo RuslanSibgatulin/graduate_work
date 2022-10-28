@@ -23,9 +23,8 @@ class MoviesService:
         # movies_id = user_movies_info["movies"]
         movies_id = [f"movie_id_{num+1}" for num in range(5)]
         new_movies_ids_response = await self.grpc_client.get_movies(user_id, movies_id)
-        movies_data = await self.api_client.get_movies_by_id(
-            obj_.movie_id for obj_ in new_movies_ids_response.movies
-        )
+        new_movies_id = [obj_.movie_id for obj_ in new_movies_ids_response.movies]
+        movies_data = await self.api_client.get_movies_by_id(new_movies_id)
         return movies_data
 
 
