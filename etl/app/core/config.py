@@ -6,7 +6,7 @@ events_config = {
         "model": ViewEvent,
         "handlers": [UserViewsHandler]
     },
-    "likes": {
+    "like": {
         "model": LikeEvent,
         "handlers": [MovieLikeHandler]
     }
