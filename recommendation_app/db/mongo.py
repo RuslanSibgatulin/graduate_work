@@ -15,12 +15,3 @@ async def get_mongo() -> AsyncIOMotorClient:
 async def get_mongo_client() -> AsyncIOMotorClient:
     return mongo_client
 
-
-async def init_collections():
-    client = await get_mongo_client()
-    db = client[config.MONGO_DB]
-    for collection in config.get_collections():
-        try:
-            await db.create_collection(collection)
-        except CollectionInvalid:
-            pass

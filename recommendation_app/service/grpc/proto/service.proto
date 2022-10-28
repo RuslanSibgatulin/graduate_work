@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+message MovieRequest {
+  string movie_id = 1;
+}
+
+message Movie {
+  string movie_id = 1;
+  string title = 2;
+  uint32 score = 3;
+}
+
+service MoviesService {
+  rpc GetMovieInfo(MovieRequest) returns (Movie);
+}
