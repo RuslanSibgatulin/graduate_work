@@ -1,0 +1,7 @@
+dependency-injector
+numpy
+pydantic
+pymongo
+tensorflow
+tensorflow-datasets
+tensorflow-recommenders
