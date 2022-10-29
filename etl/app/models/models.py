@@ -21,4 +21,4 @@ class ViewEvent(EventMixin):
 
 
 class LikeEvent(EventMixin):
-    score: int = Field(ge=1, le=10, alias="rating")
+    score: int = Field(ge=1, le=10)
