@@ -6,6 +6,7 @@ from db.mongo import get_mongo_client
 from models.movies_list import Movie
 from service.grpc.client import GRPCModelClient
 from service.movies_api_service import APIMoviesService
+from utils.models import Movie as MovieDC
 
 
 class MoviesService:
@@ -18,10 +19,16 @@ class MoviesService:
         self.api_client = APIMoviesService
 
     async def get_movies_for(self, user_id: str) -> list[Movie]:
-        # collection = self.mongo_db[config.MONGO_USER_COLLECTION]
-        # user_movies_info = await collection.find_one({"user_id": user_id})
-        # movies_id = user_movies_info["movies"]
-        movies_id = [f"movie_id_{num+1}" for num in range(5)]
+        collection = self.mongo_db[config.MONGO_USER_COLLECTION]
+        user_movies_info = await collection.find_one({"user_id": user_id})
+        movies = user_movies_info["movies"]  # dict { movie_id : { timestamp: float, score: float } }
+        obj_list = []
+        for movie_id, info in movies.items():
+            obj_list.append(MovieDC(
+                id=movie_id, timestamp=info.get("timestamp"), score=info.get("score")
+            ))
+        obj_list.sort(key=lambda obj_: obj_.timestamp, reverse=True)
+        movies_id = [movie.id for movie in obj_list[:10]]
         new_movies_ids_response = await self.grpc_client.get_movies(user_id, movies_id)
         new_movies_id = [obj_.movie_id for obj_ in new_movies_ids_response.movies]
         movies_data = await self.api_client.get_movies_by_id(new_movies_id)
