@@ -14,6 +14,8 @@ class Config(BaseSettings):
     URL_MOVIES_BY_GENRES: str = "http://127.0.0.1/api/v1/film"
     URL_MOVIES_NAME: str = "http://127.0.0.1/api/v1/film/names"
     GRPC_ADDR: str = "localhost:50051"
+    LOGSTASH_HOST: str = "logstash"
+    LOGSTASH_PORT: int = 5044
 
     @property
     def mongo_uri(self) -> str:

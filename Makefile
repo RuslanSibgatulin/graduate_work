@@ -1,7 +1,7 @@
 ## ----------------------------------------------------------------------
 ## Makefile.
 ## ----------------------------------------------------------------------
-compose = -f docker-compose-etl.yaml
+compose = -f docker-compose.yaml
 
 
 help:     ## Show this help.
@@ -13,7 +13,7 @@ start: ## Start
 stop: ## Stop
 		 cd docker && DOCKER_BUILDKIT=1 docker-compose ${compose} down
 
-init:  ## First and full initialization.
+init:  ## Initialization.
 		# TODO: Init here
 
 restart: stop start
