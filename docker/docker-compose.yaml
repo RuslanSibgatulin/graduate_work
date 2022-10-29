@@ -1,0 +1,27 @@
+version: '3.8'
+
+networks:
+  default:
+    name: cinema-network
+    external: true
+
+services:
+  recometl:
+    container_name: recom-etl
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileRecomETL
+    env_file: envs/etl.env
+    external_links:
+      - broker
+      - redis
+      - mongo
+
+  recomapi:
+    container_name: recom-api
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileRecomApi
+    env_file: envs/api.env
+    external_links:
+      - mongo

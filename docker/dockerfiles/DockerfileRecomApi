@@ -1,0 +1,8 @@
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+
+WORKDIR /app
+COPY /recommendation_app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY /recommendation_app .
+
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py", "main:app"]
