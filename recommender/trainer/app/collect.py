@@ -22,30 +22,6 @@ class RatingInfo:
     rating: int
 
 
-def collect(
-    loader: tp.Callable[[], tp.Generator],
-    writer: tp.Callable[[], tp.Generator],
-    transformer: tp.Callable[[tp.Any], tp.Iterable],
-) -> None:
-    loader, writer = loader(), writer()
-
-    n_objects = next(loader)
-    progress_bar = tf.keras.utils.Progbar(n_objects)
-
-    writer.send(None)
-
-    for objs in loader:
-        for obj in objs:
-            transformed_objs = next(transformer(obj))
-            writer.send(transformed_objs)
-            progress_bar.add(1)
-
-    try:
-        writer.send(None)
-    except StopIteration as e:
-        print(e.value)
-
-
 class Collector:
     def __init__(
         self,
@@ -71,8 +47,8 @@ class Collector:
 
         try:
             self.writer.send(None)
-        except StopIteration as e:
-            print(e.value)
+        except StopIteration:
+            pass
 
 
 class MongoLoader:

@@ -35,7 +35,7 @@ def train_retrieval(
     cached_test = test_ds.batch(2_000).cache()
 
     model.fit(cached_train, epochs=3, callbacks=[cp_callback])
-    print(model.evaluate(cached_test, return_dict=True))
+    model.evaluate(cached_test, return_dict=True)
 
     index = tfrs.layers.factorized_top_k.BruteForce(model.query_model, k=recs_length)
     index.index_from_dataset(
