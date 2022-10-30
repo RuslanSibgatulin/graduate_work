@@ -22,7 +22,6 @@ async def get_base_movies(
         service: APIMoviesService = Depends(get_api_movies_service)
 ) -> list[GerneMovies]:
     tasks = []
-    print(user_info)
     for genre in user_info["genres"]:
         task = asyncio.create_task(service.get_movies_by_(genre))
         tasks.append(task)
