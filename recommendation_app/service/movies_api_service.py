@@ -7,10 +7,13 @@ from fastapi import HTTPException
 from models.movies_list import GerneMovies, Movie
 
 
+logger = logging.getLogger(__name__)
+
+
 class APIMoviesService:
     @classmethod
     async def get_movies_by_(cls, genre: str = None) -> GerneMovies:
-        params = {"sort": "-imdb_rating", "page[size]": 10}
+        params = {"sort": "-imdb_rating", "page[size]": "asd"}
         if genre is not None:
             params["filter[genre]"] = genre
         async with ClientSession() as session:
@@ -22,6 +25,9 @@ class APIMoviesService:
                         movies.append(Movie(**movie))
                     return GerneMovies(genre=genre, movies=movies)
                 else:
+                    logger.error(
+                        f"Movies api response with code {request.status}", extra=json_body
+                    )
                     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Something went wrong")
 
     @classmethod
@@ -36,6 +42,9 @@ class APIMoviesService:
                         movies.append(Movie(**movie))
                     return movies
                 else:
+                    logger.error(
+                        msg=f"Movies api response with code {request.status}", extra=json_body
+                    )
                     raise HTTPException(status_code=HTTPStatus.INTERNAL_SERVER_ERROR, detail="Something went wrong")
 
 
