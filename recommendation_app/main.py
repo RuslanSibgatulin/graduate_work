@@ -6,12 +6,12 @@ from fastapi.responses import ORJSONResponse
 
 app = FastAPI(
     title="Recommendation API",
-    docs_url="/rec/apidocs",
-    openapi_url="/rec/apidocs.json",
+    docs_url="/recommendations/apidocs",
+    openapi_url="/recommendations/apidocs.json",
     default_response_class=ORJSONResponse,
 )
 
-app.include_router(recommendation_router, prefix="/api/v1/rec")
+app.include_router(recommendation_router, prefix="/api/v1/recommendations")
 
 
 @app.on_event("startup")
