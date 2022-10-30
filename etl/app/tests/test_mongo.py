@@ -12,7 +12,7 @@ async def fill_mogodb() -> None:
         user = str(uuid.uuid4())
         for _ in range(random.randrange(1, 5)):
             movie = str(uuid.uuid4())
-            await mi.add_view_to_profile(user, movie, time.time())
+            await mi.add_view_to_profile(user, movie, int(time.time()))
 
 
 if __name__ == "__main__":
