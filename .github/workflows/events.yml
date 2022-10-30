@@ -15,5 +15,5 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
           Repository: ${{ github.repository }}
-          Author: ${{ github.actor }}
-          Message: ${{ github.event.issue.body }}
+          Author: ${{ github.actor }} has created a new issue: ${{ github.event.issue.title }}
+          Body: ${{ github.event.issue.body }}
