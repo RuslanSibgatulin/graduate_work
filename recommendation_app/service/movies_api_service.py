@@ -1,9 +1,8 @@
 from http import HTTPStatus
 
 from aiohttp import ClientSession
-from fastapi import HTTPException
-
 from core.config import config
+from fastapi import HTTPException
 from models.movies_list import GerneMovies, Movie
 
 

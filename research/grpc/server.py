@@ -4,10 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 from random import randrange
 
 import grpc
-
 from builds.service_pb2 import Movie, MovieRequest
-from builds.service_pb2_grpc import (
-    MoviesServiceServicer, add_MoviesServiceServicer_to_server)
+from builds.service_pb2_grpc import (MoviesServiceServicer,
+                                     add_MoviesServiceServicer_to_server)
 
 
 class Service(MoviesServiceServicer):

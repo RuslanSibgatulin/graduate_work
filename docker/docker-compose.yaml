@@ -25,3 +25,28 @@ services:
     env_file: envs/api.env
     external_links:
       - mongo
+
+  recomtrainer:
+    container_name: recom-trainer
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileRecomModelTrainer
+    env_file:
+      - envs/recomtrainer.env
+    volumes:
+      - recommender:/models:ro
+
+  recomserver:
+    container_name: recom-serving
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileRecomModelServer
+    env_file:
+      - envs/recomserver.env
+    depends_on:
+      - recomtrainer
+    volumes:
+      - recommender:/models
+
+volumes:
+  recommender:

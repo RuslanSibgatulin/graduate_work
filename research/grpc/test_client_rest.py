@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import json
-from time import time
 import uuid
+from time import time
 
 import urllib3
 

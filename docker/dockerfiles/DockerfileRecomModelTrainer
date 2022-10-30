@@ -1,0 +1,9 @@
+FROM python:3.10.4-bullseye
+
+WORKDIR /app
+
+COPY recommender/trainer/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY recommender/trainer/app .
+COPY recommender/trainer/models /models

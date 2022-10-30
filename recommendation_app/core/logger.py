@@ -2,7 +2,6 @@ from logging import config as logging_config
 
 from core.config import config
 
-
 LOG_DEFAULT_HANDLERS = [
     "console",
     "logstash",

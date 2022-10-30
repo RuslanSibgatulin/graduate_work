@@ -14,10 +14,22 @@
 ## Используемые технологии
 - Код приложения на Python + fastapi.
 - Транзакционное хранилище (OLTP) - Kafka.
+- Хранилище BigData - MongoDB.
 - Сборщик логов - ELK.
 - Все компоненты системы запускаются через Docker-compose.
 
 # Запуск приложения
+## Состав проекта
+Для рекомендательной системы зависимостями являются разработанные ранее компоненты:
+
+- [Панель администрирования фильмов](http://localhost/admin)
+- [API фильмов](http://localhost/api/apidocs)
+- [Сервис авторизации](http://localhost/auth/apidocs/)
+- [Сервис UGC](http://localhost/ugc/apidocs)
+
+Все они доступны из репозитория: https://github.com/Riyce/Admin_panel_sprint_2
+
+
 ## Клонировать репозиторий
     git clone git@github.com:RuslanSibgatulin/graduate_work.git
 
@@ -30,6 +42,8 @@
 Выполнить в терминале:
 
     make start
+
+Документация сервиса будет доступна по ссылке http://localhost/rec/apidocs
 
 # Команда
 - [Ruslan Sibgatulin (lead)](https://github.com/RuslanSibgatulin)

@@ -1,7 +1,6 @@
 from concurrent import futures
 
 import grpc
-
 from core.config import config
 from service.grpc.fake_server.api import MoviesRecommenderService
 from service.grpc.proto import recommender_pb2_grpc

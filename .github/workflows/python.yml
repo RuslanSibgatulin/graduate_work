@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [3.7, 3.8, 3.9]
+        version: [3.8, 3.9, '3.10']
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python3.(7/8/9)
+      - name: Set up Python3.(8/9/10)
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.version }}
@@ -37,6 +37,9 @@ jobs:
       - name: Run flake8
         run: |
           flake8 etl/ --show-source
+          flake8 recommendation_app/ --show-source
+          flake8 recommender/ --show-source
+
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.0
