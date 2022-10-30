@@ -1,28 +1,23 @@
-from typing import List
-
 from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
-    SECRET_KEY: str = "extra secret"
-    HASH_ALGORITHM: str = "SHA-256"
-    MONGO_HOST: str = "127.0.0.1"
-    MONGO_PORT: int = 27017
-    MONGO_DB: str = "like"
-    MONGO_USER_COLLECTION: str = "user"
-    USER_GENRES_CHECK_URL: str = "http://127.0.0.1/auth/v1/genres"
-    URL_MOVIES_BY_GENRES: str = "http://127.0.0.1/api/v1/film"
-    URL_MOVIES_NAME: str = "http://127.0.0.1/api/v1/film/names"
-    GRPC_ADDR: str = "localhost:50051"
-    LOGSTASH_HOST: str = "logstash"
-    LOGSTASH_PORT: int = 5044
+    secret_key: str = "extra secret"
+    hash_algorithm: str = "SHA-256"
+    mongo_host: str = "127.0.0.1"
+    mongo_port: int = 27017
+    mongo_db: str = "like"
+    mongo_user_collection: str = "user"
+    user_genres_check_url: str = "http://127.0.0.1/auth/v1/genres"
+    url_movies_by_genre: str = "http://127.0.0.1/api/v1/film"
+    url_movies_name: str = "http://127.0.0.1/api/v1/film/names"
+    grpc_addr: str = "localhost:50051"
+    logstash_host: str = "logstash"
+    logstash_port: int = 5044
 
     @property
     def mongo_uri(self) -> str:
-        return f"mongodb://{self.MONGO_HOST}:{self.MONGO_PORT}"
-
-    def get_collections(self) -> List[str]:
-        return []
+        return f"mongodb://{self.mongo_host}:{self.mongo_port}"
 
 
 config = Config()

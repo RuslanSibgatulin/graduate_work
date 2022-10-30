@@ -11,7 +11,7 @@ class APIMoviesService:
     async def get_movies_by_(cls, genre: str) -> GerneMovies:
         params = {"filter[genre]": genre, "sort": "-imdb_rating", "page[size]": 10}
         async with ClientSession() as session:
-            async with session.get(config.URL_MOVIES_BY_GENRES, params=params) as request:
+            async with session.get(config.url_movies_by_genre, params=params) as request:
                 json_body = await request.json()
                 if request.status == HTTPStatus.OK:
                     movies = []
@@ -25,7 +25,7 @@ class APIMoviesService:
     async def get_movies_by_id(cls, movies_id: list[str]) -> list[Movie]:
         params = {"ids": ",".join(movies_id)}
         async with ClientSession() as session:
-            async with session.get(config.URL_MOVIES_NAME, params=params) as request:
+            async with session.get(config.url_movies_name, params=params) as request:
                 json_body = await request.json()
                 if request.status == HTTPStatus.OK:
                     movies = []

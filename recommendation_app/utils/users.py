@@ -12,8 +12,8 @@ async def get_user(user_credentials: HTTPAuthorizationCredentials = Security(BEA
     try:
         payload = jwt.decode(
             jwt=user_credentials.credentials,
-            key=config.SECRET_KEY,
-            algorithms=[config.HASH_ALGORITHM],
+            key=config.secret_key,
+            algorithms=[config.hash_algorithm],
             options={"verify_signature": False},
         )
     except jwt.DecodeError:

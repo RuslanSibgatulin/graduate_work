@@ -12,7 +12,7 @@ def serve():
         MoviesRecommenderService(), server
     )
 
-    server.add_insecure_port(config.GRPC_ADDR)
+    server.add_insecure_port(config.grpc_addr)
     server.start()
     print("GRPC server started.")
     server.wait_for_termination()

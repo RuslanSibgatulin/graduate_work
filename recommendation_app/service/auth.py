@@ -22,7 +22,7 @@ class AuthService:
     async def validate_token_and_get_genres(cls, token: HTTPAuthorizationCredentials) -> Any:
         headers = {"Authorization": f"Bearer {token.credentials}"}
         async with ClientSession(headers=headers) as session:
-            async with session.get(config.USER_GENRES_CHECK_URL) as r:
+            async with session.get(config.user_genres_check_url) as r:
                 json_body = await r.json()
                 if r.status == status.HTTP_200_OK:
                     return json_body

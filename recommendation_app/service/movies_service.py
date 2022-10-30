@@ -13,12 +13,12 @@ class MoviesService:
             self,
             mongo: AsyncIOMotorClient,
     ) -> None:
-        self.mongo_db = mongo[config.MONGO_DB]
+        self.mongo_db = mongo[config.mongo_db]
         self.grpc_client = GRPCModelClient
         self.api_client = APIMoviesService
 
     async def get_movies_for(self, user_id: str) -> list[Movie]:
-        collection = self.mongo_db[config.MONGO_USER_COLLECTION]
+        collection = self.mongo_db[config.mongo_user_collection]
         user_movies_info = await collection.find_one({"user_id": user_id})
         movies = user_movies_info["movies"]  # dict { movie_id : { timestamp: float, score: float } }
         obj_list = []
