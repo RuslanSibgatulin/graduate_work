@@ -27,6 +27,8 @@
 - [Сервис авторизации](http://localhost/auth/apidocs/)
 - [Сервис UGC](http://localhost/ugc/apidocs)
 
+Все они доступны из репозитория: https://github.com/Riyce/Admin_panel_sprint_2
+
 
 ## Клонировать репозиторий
     git clone git@github.com:RuslanSibgatulin/graduate_work.git
