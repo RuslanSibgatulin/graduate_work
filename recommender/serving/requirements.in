@@ -1,0 +1,7 @@
+dependency-injector
+pydantic
+grpcio
+grpc-interceptor
+grpcio-tools
+protobuf==4.21.9
+tensorflow
