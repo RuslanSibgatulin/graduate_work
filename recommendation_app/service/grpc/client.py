@@ -1,8 +1,7 @@
 import grpc.aio
-
-from core.config import config
 import service.grpc.proto.recommender_pb2 as recommender_pb2
 import service.grpc.proto.recommender_pb2_grpc as recommender_pb2_grpc
+from core.config import config
 
 
 class GRPCModelClient:

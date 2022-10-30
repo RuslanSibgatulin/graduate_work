@@ -8,7 +8,7 @@ class MongoSettings(BaseSettings):
     profiles_collection: str = "profiles"
 
     class Config:
-        env_prefix: "mongo_"
+        env_prefix = "mongo_"
 
 
 class CollectSettings(BaseSettings):

@@ -1,7 +1,6 @@
 import logging
 
 import grpc
-
 import proto.recommender_pb2 as recommender_pb2
 import proto.recommender_pb2_grpc as recommender_pb2_grpc
 

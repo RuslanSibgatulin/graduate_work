@@ -4,13 +4,11 @@ from concurrent import futures
 from contextlib import contextmanager
 
 import grpc
-from grpc_interceptor import ExceptionToStatusInterceptor
-
 from api import MoviesRecommenderService
 from containers import Container
 from core.config import settings
+from grpc_interceptor import ExceptionToStatusInterceptor
 from proto import recommender_pb2_grpc
-
 
 container = Container()
 container.config.from_pydantic(settings)
@@ -24,13 +22,14 @@ def acquire_port(port: int):
 
     if not sock.getsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT):
         raise RuntimeError("Faieled to set SO_REUSERORT")
-    
+
     sock.bind(("", port))
-    
+
     try:
         yield sock.getsockname()
     finally:
         sock.close()
+
 
 def serve(port: int):
     interceptors = [ExceptionToStatusInterceptor()]
@@ -50,7 +49,7 @@ def serve(port: int):
 def main():
     process_count = multiprocessing.cpu_count()
 
-    with acquire_port(settings.app.port) as address:
+    with acquire_port(settings.app.port):
         workers = []
 
         for _ in range(process_count):

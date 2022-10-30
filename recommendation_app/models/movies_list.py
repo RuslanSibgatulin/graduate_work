@@ -16,5 +16,3 @@ class Movie(BaseModel):
 class GerneMovies(BaseModel):
     genre: str
     movies: list[Movie]
-
-

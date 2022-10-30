@@ -1,9 +1,8 @@
-from dependency_injector import providers, containers
+import collect
+from dependency_injector import containers, providers
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
-
-import collect
 from train import ranking, retrieval
 
 

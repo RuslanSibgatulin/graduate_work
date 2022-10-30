@@ -1,13 +1,11 @@
 import asyncio
 
 from fastapi import APIRouter, Depends, Security, status
-
 from models.movies_list import GerneMovies, Movie
 from service.auth import get_genres_and_validate
 from service.movies_api_service import APIMoviesService, get_api_movies_service
 from service.movies_service import MoviesService, get_movies_service
 from utils.movie_process import MovieProcessor
-
 
 router = APIRouter(tags=["Recommendations"])
 

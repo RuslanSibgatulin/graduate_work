@@ -1,10 +1,7 @@
 import typing as tp
 
-from dependency_injector.containers import Container
-from dependency_injector.wiring import Provide, inject
-
-from collect import collect as collector
 from containers import Container
+from dependency_injector.wiring import Provide, inject
 
 
 @inject

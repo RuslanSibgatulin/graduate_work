@@ -20,5 +20,9 @@ stop: ## Stop
 init:  ## Initialization.
 		# TODO: Init here
 
+lint:
+		isort etl/ recommendation_app/ recommender/
+		flake8 etl/ recommendation_app/ recommender/ --show-source
+
 restart: stop start
 		

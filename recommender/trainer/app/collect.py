@@ -4,10 +4,7 @@ import random
 import typing as tp
 from dataclasses import dataclass
 
-
 import tensorflow as tf
-import pymongo
-
 
 logger = logging.getLogger(__name__)
 

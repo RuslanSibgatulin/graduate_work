@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from time import time
 import uuid
+from time import time
 
 import grpc
-
 from builds.service_pb2 import MovieRequest
 from builds.service_pb2_grpc import MoviesServiceStub
 

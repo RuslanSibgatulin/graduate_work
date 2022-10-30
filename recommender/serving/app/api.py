@@ -1,7 +1,6 @@
 import grpc
-from dependency_injector.wiring import Provide, inject
-
 from containers import Container
+from dependency_injector.wiring import Provide, inject
 from proto import recommender_pb2, recommender_pb2_grpc
 from services import RecommenderService
 
@@ -19,7 +18,6 @@ class MoviesRecommenderService(recommender_pb2_grpc.MoviesRecommenderServicer):
         request: recommender_pb2.GetRecommendationsRequest,
         _: grpc.ServicerContext,
     ) -> recommender_pb2.GetRecommendationsResponse:
-        from time import time
 
         movies = self.recommender.recommend(request.user_id, request.views)
         return recommender_pb2.GetRecommendationsResponse(

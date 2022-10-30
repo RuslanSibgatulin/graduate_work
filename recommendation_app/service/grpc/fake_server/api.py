@@ -1,9 +1,7 @@
 from random import choice
 
 import grpc
-
 from service.grpc.proto import recommender_pb2, recommender_pb2_grpc
-
 
 MOVIES = [
     "b1f1e8a6-e310-47d9-a93c-6a7b192bac0e",
@@ -36,7 +34,7 @@ class MoviesRecommenderService(recommender_pb2_grpc.MoviesRecommenderServicer):
         _: grpc.ServicerContext,
     ) -> recommender_pb2.GetRecommendationsResponse:
         movies = set()
-        for num in range(7):
+        for _ in range(7):
             movie = choice(MOVIES)
             movies.add(movie)
         return recommender_pb2.GetRecommendationsResponse(

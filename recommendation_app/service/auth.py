@@ -1,13 +1,11 @@
 from typing import Any
 
 from aiohttp.client import ClientSession
+from core.config import config
 from fastapi import Depends, status
 from fastapi.exceptions import HTTPException
 from fastapi.security import HTTPBearer
 from fastapi.security.http import HTTPAuthorizationCredentials
-
-from core.config import config
-
 
 oauth2_scheme = HTTPBearer()
 

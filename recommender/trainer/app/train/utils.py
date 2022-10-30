@@ -1,6 +1,5 @@
 import os
 
-import numpy as np
 import tensorflow as tf
 
 
@@ -14,7 +13,6 @@ def init_training(data_input_dir: str, model_output_dir: str):
     test = tf.data.TFRecordDataset(test_filename)
 
     checkpoint_path = os.path.join(model_output_dir, "checkpoint/cp.ckpt")
-    checkpoint_dir = os.path.dirname(checkpoint_path)
     cp_callback = tf.keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path, save_weights_only=True, verbose=1
     )

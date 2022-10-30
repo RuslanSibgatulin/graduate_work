@@ -18,6 +18,3 @@ class MovieProcessor:
                 if len(movie_obj.movies) == cls.MOVIES_MAX:
                     break
         return movies_list
-
-
-

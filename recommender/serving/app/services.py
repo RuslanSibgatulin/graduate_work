@@ -2,7 +2,6 @@ from heapq import nlargest
 
 import numpy as np
 import tensorflow as tf
-
 from dto import MovieContextInfo
 
 
@@ -20,7 +19,7 @@ class RecommenderService:
         _, movies_tensor = self.retrieval(tf.constant([padded_views_ids]))
         recs = movies_tensor.numpy()[0]
         narrowed_recs = self.narrow_recommendations(user_id, recs)
-        
+
         return [movie_id.decode() for movie_id in narrowed_recs]
 
     def narrow_recommendations(

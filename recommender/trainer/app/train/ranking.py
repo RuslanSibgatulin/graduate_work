@@ -1,11 +1,7 @@
-import os
 from functools import partial
 
 import numpy as np
 import tensorflow as tf
-import tensorflow_datasets as tfds
-import tensorflow_recommenders as tfrs
-
 from models import ranking
 from train.utils import init_training
 
@@ -39,7 +35,6 @@ def train_ranking(*, ratings_input_dir: str, model_output_dir: str):
     model.compile(optimizer=tf.keras.optimizers.Adagrad(learning_rate=0.1))
 
     cached_train = train_ds.shuffle(100_000).batch(10_000).cache()
-    cached_test = test_ds.batch(5_000).cache()
 
     model.fit(cached_train, epochs=10, callbacks=[cp_callback])
 

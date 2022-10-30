@@ -2,8 +2,7 @@
 
 import json
 
-from flask import Flask
-from flask import request
+from flask import Flask, request
 
 app = Flask(__name__)
 

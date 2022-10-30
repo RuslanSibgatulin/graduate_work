@@ -2,7 +2,6 @@ import argparse
 
 import handlers
 
-
 root = argparse.ArgumentParser(prog="Trainer")
 
 subparsers = root.add_subparsers(
