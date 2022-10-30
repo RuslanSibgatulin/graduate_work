@@ -11,7 +11,7 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
 )
 
-app.include_router(recommendation_router, prefix="/rec/v1")
+app.include_router(recommendation_router, prefix="/api/v1/rec")
 
 
 @app.on_event("startup")
