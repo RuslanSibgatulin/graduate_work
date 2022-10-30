@@ -40,14 +40,7 @@ class EventsHandler:
     @aiobackoff("Kafka.consume", logger)
     async def consume(self, topic: str) -> None:
         logger.info("Consume topic %s", topic)
-        consumer = AIOKafkaConsumer(
-            auto_offset_reset="earliest",
-            bootstrap_servers=self.kafka_url,
-            enable_auto_commit=False,
-            retry_backoff_ms=500,
-            max_poll_interval_ms=60000,
-            metadata_max_age_ms=60000,
-            value_deserializer=lambda v: orjson.loads(v.decode("utf-8")))
+        consumer = self.create_consumer()
         tp = TopicPartition(topic, 0)
         await consumer.start()
         consumer.assign([tp])
@@ -65,6 +58,18 @@ class EventsHandler:
         finally:
             await self.redis.close()
             await consumer.stop()
+
+    def create_consumer(self) -> AIOKafkaConsumer:
+        consumer = AIOKafkaConsumer(
+            auto_offset_reset="earliest",
+            bootstrap_servers=self.kafka_url,
+            enable_auto_commit=False,
+            retry_backoff_ms=500,
+            max_poll_interval_ms=60000,
+            metadata_max_age_ms=60000,
+            value_deserializer=lambda v: orjson.loads(v.decode("utf-8")))
+
+        return consumer
 
     async def save_offset(self, topic, msg):
         REDIS_HASH_KEY = f"consumer:{topic}:offset"

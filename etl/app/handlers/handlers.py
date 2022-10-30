@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class BaseHandlerMongo(MongoInterface):
     def __init__(self, event: str) -> None:
         super().__init__(
-            mongo_settings.mongo_uri, mongo_settings.MONGO_DB
+            mongo_settings.mongo_uri, mongo_settings.db
         )
         self.event = event
 

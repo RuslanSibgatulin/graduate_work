@@ -7,7 +7,7 @@ from db.mongo import MongoInterface
 
 
 async def fill_mogodb() -> None:
-    mi = MongoInterface("127.0.0.1:27019", "RecomDB")
+    mi = MongoInterface("127.0.0.1:27019", "recom_db")
     for _ in range(10):
         user = str(uuid.uuid4())
         for _ in range(random.randrange(1, 5)):

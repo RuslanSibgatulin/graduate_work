@@ -2,41 +2,53 @@ from pydantic import BaseSettings
 
 
 class KafkaSettings(BaseSettings):
-    KAFKA_HOST: str = "localhost"
-    KAFKA_PORT: int = 9092
+    host: str = "localhost"
+    port: int = 9092
+
+    class Config:
+        env_prefix = "kafka_"
 
     @property
     def uri(self) -> str:
-        return f"{self.KAFKA_HOST}:{self.KAFKA_PORT}"
+        return f"{self.host}:{self.port}"
 
 
 class RedisSettings(BaseSettings):
-    REDIS_HOST: str = "127.0.0.1"
-    REDIS_PORT: int = 6379
-    REDIS_DB_INDEX: int = 0
+    host: str = "127.0.0.1"
+    port: int = 6379
+    db_index: int = 0
+
+    class Config:
+        env_prefix = "redis_"
 
     @property
     def uri(self) -> str:
         return "redis://{0}:{1}/{2}".format(
-            self.REDIS_HOST,
-            self.REDIS_PORT,
-            self.REDIS_DB_INDEX
+            self.host,
+            self.port,
+            self.db_index
         )
 
 
 class MongoSettings(BaseSettings):
-    MONGO_HOST: str = "127.0.0.1"
-    MONGO_PORT: int = 27019
-    MONGO_DB: str = "recommendations"
+    host: str = "127.0.0.1"
+    port: int = 27019
+    db: str = "recom_db"
+
+    class Config:
+        env_prefix = "mongo_"
 
     @property
     def mongo_uri(self) -> str:
-        return f"mongodb://{self.MONGO_HOST}:{self.MONGO_PORT}"
+        return f"mongodb://{self.host}:{self.port}"
 
 
 class LogstashSettings(BaseSettings):
-    LOGSTASH_HOST: str = "localhost"
-    LOGSTASH_PORT: int = 5044
+    host: str = "localhost"
+    port: int = 5044
+
+    class Config:
+        env_prefix = "logstash_"
 
 
 mongo_settings = MongoSettings()
