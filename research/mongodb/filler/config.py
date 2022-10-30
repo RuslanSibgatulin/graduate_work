@@ -13,9 +13,5 @@ MONGO_COLLECTION = os.getenv("MONGO_COLLECTION", "profiles")
 MONGO_URI = f"mongodb://{MONGO_HOST}:{MONGO_POST}/"
 REAL_USER_UUID = "908e33da-6f57-40a5-a8cf-5722dbeed1dc"  # Your real user_id in auth db
 
-GENRES = [
-    "Action", "Adventure", "Fantasy", "Sci-Fi", "Drama", "Music", "Romance", "Thriller", "Mystery",
-    "Comedy", "Animation", "Family", "Biography", "Musical", "Crime", "Short", "Western", "Documentary",
-    "History", "War", "Game-Show", "Reality-TV", "Horror", "Sport", "Talk-Show", "News",
-]
-GENRES_COUNT = [1, 2, 3, 4]
+
+GENRES_COUNT = [2, 3, 4]

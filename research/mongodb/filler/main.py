@@ -1,5 +1,3 @@
-import pprint
-
 from config import REAL_USER_UUID
 from psql import get_genres_map, get_genres
 from user import generate_user

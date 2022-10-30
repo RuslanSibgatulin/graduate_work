@@ -2,7 +2,7 @@ import time
 from random import choice
 from uuid import uuid4
 
-from config import GENRES, GENRES_COUNT
+from config import GENRES_COUNT
 
 
 MOVIES_IN_HISTORY = 120
