@@ -1,0 +1,13 @@
+FROM python:3.10.4-bullseye
+
+WORKDIR /app
+RUN mkdir /models
+
+COPY recommender/serving/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt --no-dependencies
+
+COPY recommender/serving/app .
+
+EXPOSE 50051
+
+CMD ["python3", "main.py"]

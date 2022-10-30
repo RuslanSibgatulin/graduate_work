@@ -25,11 +25,11 @@ class CollectSettings(BaseSettings):
 
 class TrainSettings(BaseSettings):
     views_input_dir: str = "./views-data"
-    retrieval_output_dir: str = "./retrieval"
+    retrieval_output_dir: str = "../models/retrieval"
     max_views_length: int = 10
 
-    ratings_input_dir: str = "./ratings-data"
-    ranking_output_dir: str = "./ranking"
+    ratings_input_dir: str = "../ratings-data"
+    ranking_output_dir: str = "../models/ranking"
 
     class Config:
         env_prefix = "train_"
