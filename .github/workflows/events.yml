@@ -1,0 +1,19 @@
+name: Recommendations events
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+    - name: send message
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          Repository: ${{ github.repository }}
+          Author: ${{ github.actor }}
+          Message: ${{ github.event.issue.body }}
