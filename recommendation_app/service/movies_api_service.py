@@ -1,3 +1,4 @@
+import logging
 from http import HTTPStatus
 
 from aiohttp import ClientSession
@@ -8,8 +9,10 @@ from models.movies_list import GerneMovies, Movie
 
 class APIMoviesService:
     @classmethod
-    async def get_movies_by_(cls, genre: str) -> GerneMovies:
-        params = {"filter[genre]": genre, "sort": "-imdb_rating", "page[size]": 10}
+    async def get_movies_by_(cls, genre: str = None) -> GerneMovies:
+        params = {"sort": "-imdb_rating", "page[size]": 10}
+        if genre is not None:
+            params["filter[genre]"] = genre
         async with ClientSession() as session:
             async with session.get(config.url_movies_by_genre, params=params) as request:
                 json_body = await request.json()
