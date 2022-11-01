@@ -1,7 +1,7 @@
 from random import choice
 
 from fastapi import APIRouter, Depends, Security, status
-from models.movies_list import GerneMovies, Movie
+from models.movies_list import Movie
 from service.auth import get_genres_and_validate
 from service.movies_api_service import APIMoviesService, get_api_movies_service
 from service.movies_service import MoviesService, get_movies_service
@@ -13,20 +13,20 @@ router = APIRouter(tags=["Recommendations"])
     "/base",
     summary="Get movies by genre.",
     description="Get movies for user with user's favorite genres.",
-    response_model=GerneMovies,
+    response_model=list[Movie],
     status_code=status.HTTP_200_OK,
 )
 async def get_base_movies(
         user_info: dict = Security(get_genres_and_validate),
         service: APIMoviesService = Depends(get_api_movies_service)
-) -> list[GerneMovies]:
+) -> list[Movie]:
     genres = user_info["genres"]
     if genres:
         genre = choice(genres)
     else:
         genre = None
-    result = await service.get_movies_by_(genre)
-    return result
+    movies = await service.get_movies_by_(genre)
+    return movies
 
 
 @router.get(

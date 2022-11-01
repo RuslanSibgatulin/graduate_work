@@ -45,7 +45,7 @@
 
     make start
 
-Документация сервиса будет доступна по ссылке http://localhost/rec/apidocs
+Документация сервиса будет доступна по ссылке http://localhost/recommendations/apidocs
 
 # Команда
 - [Ruslan Sibgatulin (lead)](https://github.com/RuslanSibgatulin)

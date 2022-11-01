@@ -25,4 +25,6 @@ lint:
 		flake8 etl/ recommendation_app/ recommender/ --show-source
 
 restart: stop start
+		docker restart nginx
+
 		
