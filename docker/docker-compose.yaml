@@ -34,7 +34,7 @@ services:
     env_file:
       - envs/recomtrainer.env
     volumes:
-      - recommender:/models:ro
+      - recommender:/models
 
   recomserver:
     container_name: recom-serving
@@ -46,7 +46,7 @@ services:
     depends_on:
       - recomtrainer
     volumes:
-      - recommender:/models
+      - recommender:/models:ro
 
 volumes:
   recommender:
