@@ -10,6 +10,7 @@ from train.utils import init_training
 
 def train_retrieval(
     *,
+    movies_input_dir: str,
     views_input_dir: str,
     model_output_dir: str,
     max_views_length: int,
@@ -17,7 +18,7 @@ def train_retrieval(
 ):
     train, test, cp_callback = init_training(views_input_dir, model_output_dir)
 
-    movies, unique_movie_ids = _load_movies()
+    movies, unique_movie_ids = _load_movies(movies_input_dir)
 
     query_model = retrieval.QueryModel(unique_movie_ids)
     candidate_model = retrieval.CandidateModel(unique_movie_ids)
@@ -35,7 +36,7 @@ def train_retrieval(
     cached_test = test_ds.batch(2_000).cache()
 
     model.fit(cached_train, epochs=3, callbacks=[cp_callback])
-    model.evaluate(cached_test, return_dict=True)
+    print(model.evaluate(cached_test, return_dict=True))
 
     index = tfrs.layers.factorized_top_k.BruteForce(model.query_model, k=recs_length)
     index.index_from_dataset(
@@ -67,9 +68,21 @@ def _prepare_datasets(train, test, max_views_length: int):
     return train_ds, test_ds
 
 
-def _load_movies() -> tuple:
-    movies = tfds.load("movielens/1m-movies", split="train")
-    movies = movies.map(lambda x: x["movie_id"])
+def _load_movies(input_dir: str) -> tuple:
+    movies_filename = f"{input_dir}/movies.tfrecord"
+    movies = tf.data.TFRecordDataset(movies_filename)
+
+    features = {
+        "id": tf.io.FixedLenFeature([1], tf.string, default_value="0"),
+        "title": tf.io.FixedLenFeature([1], tf.string, default_value="0"),
+        "rating": tf.io.FixedLenFeature([1], tf.float32, default_value=0),
+    }
+
+    parse_example = partial(tf.io.parse_single_example, features=features)
+
+    movies = movies.map(parse_example)
+    movies = movies.map(lambda x: x["id"][0])
     movie_ids = movies.batch(1_000)
     unique_movie_ids = np.unique(np.concatenate(list(movie_ids)))
+
     return movies, unique_movie_ids

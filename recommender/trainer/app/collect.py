@@ -1,18 +1,27 @@
 import logging
 import os
 import random
+import time
 import typing as tp
 from dataclasses import dataclass
 
+import requests
 import tensorflow as tf
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass(slots=True)
-class MovieInfo:
+class ContextMovieInfo:
     movie_id: str
     timestamp: int
+
+
+@dataclass(slots=True)
+class MovieInfo:
+    id: str
+    title: str
+    rating: float
 
 
 @dataclass(slots=True)
@@ -72,6 +81,30 @@ class MongoLoader:
             yield batch
 
 
+class MoviesApiLoader:
+    def __init__(self, host: str, port: int):
+        self.uri = f"http://{host}{port}/api/v1/film"
+
+    def __call__(self):
+        yield None
+
+        page = 1
+        response = requests.get(self.uri, params={"page[number]": page})
+
+        while movies := response.json():
+            yield [
+                {
+                    "id": movie["uuid"],
+                    "title": movie["title"],
+                    "rating": movie["imdb_rating"],
+                }
+                for movie in movies
+            ]
+            time.sleep(0.5)
+            page += 1
+            response = requests.get(self.uri, params={"page[number]": page})
+
+
 class ProtoWriter:
     def __init__(
         self,
@@ -114,13 +147,56 @@ class ProtoWriter:
             return to_train / n, to_test / n
 
 
+class MoviesProtoWriter:
+    def __init__(self, output_dir: str, filename: str):
+        if not tf.io.gfile.exists(output_dir):
+            tf.io.gfile.makedirs(output_dir)
+
+        self.filename = os.path.join(output_dir, filename)
+
+    def __call__(self) -> tp.Generator[None, tp.Iterable[tf.train.Example], int]:
+        with tf.io.TFRecordWriter(self.filename) as writer:
+            n_movies = 0
+
+            examples = yield
+
+            while examples := (yield):
+                for example in examples:
+                    serialized_example = example.SerializeToString()
+                    writer.write(serialized_example)
+                    n_movies += 1
+
+            return n_movies
+
+
+class MoviesTransformer:
+    def __call__(self, obj):
+        feature = {
+            "id": tf.train.Feature(
+                bytes_list=tf.train.BytesList(value=[obj["id"].encode()])
+            ),
+            "title": tf.train.Feature(
+                bytes_list=tf.train.BytesList(value=[obj["title"].encode()])
+            ),
+            "rating": tf.train.Feature(
+                float_list=tf.train.FloatList(value=[obj["rating"]])
+            ),
+        }
+        example = tf.train.Example(features=tf.train.Features(feature=feature))
+        yield [example]
+
+
 class RatingsTransformer:
     def __call__(self, obj):
         user_id = obj["user_id"]
 
         examples = []
 
-        for movie_id, rating in obj["ratings"].items():
+        for movie_id, movie_profile in obj["movies"].items():
+            rating = movie_profile.get("score")
+            if rating is None:
+                continue
+
             feature = {
                 "user_id": tf.train.Feature(
                     bytes_list=tf.train.BytesList(value=[user_id.encode()])
@@ -144,15 +220,21 @@ class ViewsTransformer:
         self.max_views_length = max_views_length
 
     def __call__(self, obj):
-        views = [
-            MovieInfo(movie_id=movie_id, timestamp=ts)
-            for movie_id, ts in sorted(obj["views"].items(), key=lambda view: view[1])
-        ]
+        views = []
+
+        for movie_id, movie_profile in obj["movies"].items():
+            ts = movie_profile.get("timestamp")
+            if not ts:
+                continue
+
+            views.append(ContextMovieInfo(movie_id=movie_id, timestamp=ts))
+
+        views = sorted(views, key=lambda view: view.timestamp)
 
         yield self._generate_examples_from_views(views)
 
     def _generate_examples_from_views(
-        self, views: list[MovieInfo]
+        self, views: list[ContextMovieInfo]
     ) -> tp.Generator[list[tf.train.Example], None, None]:
         examples = []
 
@@ -161,7 +243,7 @@ class ViewsTransformer:
             context = views[start_idx:label_idx]
 
             while len(context) < self.max_views_length:
-                context.append(MovieInfo(movie_id="0", timestamp=0))
+                context.append(ContextMovieInfo(movie_id="0", timestamp=0))
 
             label_movie_id = [views[label_idx].movie_id.encode()]
             movie_id = [movie.movie_id.encode() for movie in context]

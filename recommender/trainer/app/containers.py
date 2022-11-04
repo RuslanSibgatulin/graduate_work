@@ -22,7 +22,13 @@ class Collect(containers.DeclarativeContainer):
         Collection, database=db, name=config.mongo.profiles_collection
     )
 
-    loader = providers.Factory(collect.MongoLoader, profiles_collection)
+    mongo_loader = providers.Factory(collect.MongoLoader, profiles_collection)
+
+    movies_api_loader = providers.Factory(
+        collect.MoviesApiLoader,
+        host=config.movies_api.host,
+        port=config.movies_api.port,
+    )
 
     ratings_writer = providers.Factory(
         collect.ProtoWriter,
@@ -38,16 +44,28 @@ class Collect(containers.DeclarativeContainer):
         test_filename="test.tfrecord",
     )
 
+    movies_writer = providers.Factory(
+        collect.MoviesProtoWriter,
+        output_dir=config.movies_output_dir,
+        filename="movies.tfrecord",
+    )
+
     collectors = providers.Dict(
+        movies=providers.Factory(
+            collect.Collector,
+            loader=movies_api_loader,
+            transformer=providers.Factory(collect.MoviesTransformer),
+            writer=movies_writer,
+        ),
         ratings=providers.Factory(
             collect.Collector,
-            loader=loader,
+            loader=mongo_loader,
             transformer=providers.Factory(collect.RatingsTransformer),
             writer=ratings_writer,
         ),
         views=providers.Factory(
             collect.Collector,
-            loader=loader,
+            loader=mongo_loader,
             transformer=providers.Factory(
                 collect.ViewsTransformer, max_views_length=config.max_views_length
             ),
@@ -62,6 +80,7 @@ class Train(containers.DeclarativeContainer):
 
     retrieval = providers.Callable(
         retrieval.train_retrieval,
+        movies_input_dir=config.movies_input_dir,
         views_input_dir=config.views_input_dir,
         model_output_dir=config.retrieval_output_dir,
         max_views_length=config.max_views_length,
