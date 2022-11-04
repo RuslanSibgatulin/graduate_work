@@ -19,6 +19,9 @@ start: ## Start
 stop: ## Stop
 		cd docker && DOCKER_BUILDKIT=1 docker-compose ${compose} down
 
+train: ## Train helper
+		 cd docker && docker-compose run recomtrainer sh -c 'python main.py collect views ratings movies && python main.py train retrieval ranking'
+
 init:  ## Initialization.
 		# init here
 

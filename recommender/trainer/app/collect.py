@@ -83,7 +83,7 @@ class MongoLoader:
 
 class MoviesApiLoader:
     def __init__(self, host: str, port: int):
-        self.uri = f"http://{host}{port}/api/v1/film"
+        self.uri = f"http://{host}:{port}/api/v1/film"
 
     def __call__(self):
         yield None
@@ -131,7 +131,7 @@ class ProtoWriter:
 
             examples = yield
 
-            while examples := (yield):
+            while (examples := (yield)) is not None:
                 for example in examples:
                     serialized_example = example.SerializeToString()
 
@@ -216,10 +216,11 @@ class RatingsTransformer:
 
 
 class ViewsTransformer:
-    def __init__(self, max_views_length: int):
+    def __init__(self, max_views_length: int, min_views_length: int = 2):
         self.max_views_length = max_views_length
+        self.min_views_length = min_views_length
 
-    def __call__(self, obj):
+    def __call__(self, obj) -> tp.Generator[list[tf.train.Example], None, None]:
         views = []
 
         for movie_id, movie_profile in obj["movies"].items():
@@ -230,12 +231,14 @@ class ViewsTransformer:
             views.append(ContextMovieInfo(movie_id=movie_id, timestamp=ts))
 
         views = sorted(views, key=lambda view: view.timestamp)
+        if len(views) < self.min_views_length:
+            yield []
 
         yield self._generate_examples_from_views(views)
 
     def _generate_examples_from_views(
         self, views: list[ContextMovieInfo]
-    ) -> tp.Generator[list[tf.train.Example], None, None]:
+    ) -> list[tf.train.Example]:
         examples = []
 
         for label_idx in range(1, len(views)):
