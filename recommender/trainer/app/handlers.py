@@ -9,18 +9,20 @@ def collect(
     args,
     collector_factory: dict[str, tp.Callable] = Provide[Container.collect.collectors],
 ):
-    collector = collector_factory.get(args.data)
-    if not collector:
-        raise
+    for data in args.data:
+        collector = collector_factory.get(data)
+        if not collector:
+            raise
 
-    collector()
+        collector()
 
 
 @inject
 def train(args, trainers: Container = Provide[Container.train]):
-    if args.model == "retrieval":
-        trainers.retrieval()
-    elif args.model == "ranking":
-        trainers.ranking()
-    else:
-        raise
+    for model in args.model:
+        if model == "retrieval":
+            trainers.retrieval()
+        elif model == "ranking":
+            trainers.ranking()
+        else:
+            raise
