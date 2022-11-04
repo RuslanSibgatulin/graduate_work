@@ -38,7 +38,7 @@ def train_ranking(*, ratings_input_dir: str, model_output_dir: str):
 
     model.fit(cached_train, epochs=10, callbacks=[cp_callback])
 
-    model.evaluate(cached_train, return_dict=True)
+    print(model.evaluate(cached_train, return_dict=True))
 
     model({"user_id": tf.constant(["0"]), "movie_id": tf.constant(["0"])})
 

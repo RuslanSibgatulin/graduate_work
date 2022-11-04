@@ -1,5 +1,6 @@
 dependency-injector
 numpy
+requests
 pydantic
 pymongo
 tensorflow
