@@ -12,8 +12,8 @@ from service.movies_api_service import APIMoviesService
 
 class MoviesService:
     def __init__(
-            self,
-            mongo: AsyncIOMotorClient,
+        self,
+        mongo: AsyncIOMotorClient,
     ) -> None:
         self.mongo_db = mongo[config.mongo_db]
         self.grpc_client = GRPCModelClient
@@ -25,23 +25,34 @@ class MoviesService:
         if not user_movies_info:
             return []
 
-        movies = user_movies_info["movies"]  # dict { movie_id : { timestamp: float, score: float } }
+        movies = user_movies_info[
+            "movies"
+        ]  # dict { movie_id : { timestamp: float, score: float } }
         if isinstance(movies, str):
             movies = orjson.loads(movies)
         obj_list = []
         for movie_id, info in movies.items():
-            obj_list.append(MovieDC(
-                id=movie_id, timestamp=info.get("timestamp"), score=info.get("score")
-            ))
-        obj_list.sort(key=lambda obj_: obj_.timestamp, reverse=True)
-        movies_id = [movie.id for movie in obj_list[:10]]
-        new_movies_ids_response = await self.grpc_client.get_movies(user_id, movies_id)
-        new_movies_id = [obj_.movie_id for obj_ in new_movies_ids_response.movies]
-        movies_data = await self.api_client.get_movies_by_id(new_movies_id)
+            obj_list.append(
+                MovieDC(
+                    id=movie_id,
+                    timestamp=info.get("timestamp"),
+                    score=info.get("score"),
+                )
+            )
+        obj_list.sort(key=lambda obj_: obj_.timestamp)
+        viewed_movie_ids = dict.fromkeys([movie.id for movie in obj_list])
+        recs_response = await self.grpc_client.get_movies(
+            user_id, list(viewed_movie_ids)[-10:]
+        )
+        recs_movie_ids = [obj_.movie_id for obj_ in recs_response.movies]
+        top_movie_ids = [
+            movie_id for movie_id in recs_movie_ids if movie_id not in viewed_movie_ids
+        ][:5]
+        movies_data = await self.api_client.get_movies_by_id(top_movie_ids)
         return movies_data
 
 
 def get_movies_service(
-        mongo_storage: AsyncIOMotorClient = Depends(get_mongo_client)
+    mongo_storage: AsyncIOMotorClient = Depends(get_mongo_client),
 ) -> MoviesService:
     return MoviesService(mongo=mongo_storage)
