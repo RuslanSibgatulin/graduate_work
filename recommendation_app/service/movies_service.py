@@ -4,10 +4,9 @@ from db.mongo import get_mongo_client
 from fastapi import Depends
 from models.movies_list import Movie
 from motor.motor_asyncio import AsyncIOMotorClient
-from utils.models import Movie as MovieDC
-
 from service.grpc.client import GRPCModelClient
 from service.movies_api_service import APIMoviesService
+from utils.models import Movie as MovieDC
 
 
 class MoviesService:
