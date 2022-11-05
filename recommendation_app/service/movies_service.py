@@ -1,11 +1,13 @@
+import orjson
 from core.config import config
 from db.mongo import get_mongo_client
 from fastapi import Depends
 from models.movies_list import Movie
 from motor.motor_asyncio import AsyncIOMotorClient
+from utils.models import Movie as MovieDC
+
 from service.grpc.client import GRPCModelClient
 from service.movies_api_service import APIMoviesService
-from utils.models import Movie as MovieDC
 
 
 class MoviesService:
@@ -20,7 +22,12 @@ class MoviesService:
     async def get_movies_for(self, user_id: str) -> list[Movie]:
         collection = self.mongo_db[config.mongo_user_collection]
         user_movies_info = await collection.find_one({"user_id": user_id})
+        if not user_movies_info:
+            return []
+
         movies = user_movies_info["movies"]  # dict { movie_id : { timestamp: float, score: float } }
+        if isinstance(movies, str):
+            movies = orjson.loads(movies)
         obj_list = []
         for movie_id, info in movies.items():
             obj_list.append(MovieDC(
