@@ -1,6 +1,6 @@
 import pandas as pd
 import sqlite3
-from models.models import Movie
+from core.config import db
 
 
 def get_sqlite_dataframe(dbfile: str) -> pd.DataFrame:
@@ -26,10 +26,10 @@ def get_posters(source: list[dict]) -> list[dict]:
     if not any(source):
         return []
     df = get_movies_dataframe(source, "uuid")
-    return df.join(posters).to_dict('records')
+    df = df.join(posters).reset_index()
+    return df.to_dict('records')
 
 
-db = "/home/ruslan/Документы/Practicum/Final/frontend/app/data/db_img.sqlite"
 posters = get_sqlite_dataframe(db)
 
 if __name__ == "__main__":

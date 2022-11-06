@@ -12,7 +12,7 @@ env:  ##@Environment Create .env files from examples
 		@for file in $$(find docker/envs -type f -name "*.example"); do cp $$file $${file%.example}.env; done;
 
 start: ## Start 
-		cd docker && DOCKER_BUILDKIT=1 docker-compose ${compose} up -d --build --force-recreate
+		cd docker && DOCKER_BUILDKIT=1 docker-compose ${compose} up -d
 		docker cp docker/deploy/recom-api.conf nginx:/etc/nginx/conf.d/
 		docker restart nginx
 
@@ -31,6 +31,8 @@ lint:
 
 restart: stop start
 
-test:  ## tester
-		echo test
+front_start:  ## Start recommendations frontend
+		cd docker && DOCKER_BUILDKIT=1 docker-compose -f docker-compose-front.yaml up -d
 		
+front_stop:  ## Start recommendations frontend
+		cd docker && DOCKER_BUILDKIT=1 docker-compose -f docker-compose-front.yaml down

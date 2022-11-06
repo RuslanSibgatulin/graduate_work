@@ -1,0 +1,15 @@
+version: '3.8'
+
+networks:
+  default:
+    name: cinema-network
+    external: true
+
+services:
+  recomfront:
+    container_name: recom-front
+    ports:
+      - 8000:8000
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileRecomFront

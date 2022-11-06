@@ -1,8 +1,9 @@
-auth_url = "http://localhost/api/v1/auth/login"
-recom_url_content = "http://localhost/api/v1/recommendations/base"
-recom_url_ml = "http://localhost/api/v1/recommendations/model"
-ugc_like_url = "http://localhost/api/v1/ugc/movie-likes"
-ugc_progress_url = "http://localhost/api/v1/ugc/progress"
+auth_url = "http://auth:8000/api/v1/auth/login"
+recom_url_content = "http://recom-api:8000/api/v1/recommendations/base"
+recom_url_ml = "http://recom-api:8000/api/v1/recommendations/model"
+ugc_like_url = "http://ugcapp:8000/api/v1/ugc/movie-likes"
+ugc_progress_url = "http://ugcapp:8000/api/v1/ugc/progress"
+db = "/app/data/db_img.sqlite"
 
 fake_token = {
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY2NzMxNjg4MCwianRpIjoiZDQ5YTU5NjMtOGQyMS00OTA1LWFkOGYtYjYyYjE4MDM5MzU1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6eyJ1c2VyX2lkIjoiOTA4ZTMzZGEtNmY1Ny00MGE1LWE4Y2YtNTcyMmRiZWVkMWRjIiwiYWN0aW9uX2lkcyI6WzEsMiwzLDQsNSw2LDcsOCw5LDEwLDExLDEyLDEzLDE0LDE1XX0sIm5iZiI6MTY2NzMxNjg4MCwiZXhwIjoxNjY3MzE3MTgwfQ.-IM9dHs9WYccXjXqLQ8_lGfNLq1QuKZ-Z1AuMq9S70E",
