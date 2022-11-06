@@ -1,4 +1,5 @@
 import uvicorn
+from api.v1.genres import router as genres_router
 from api.v1.recomendations import router as recommendation_router
 from db import mongo
 from fastapi import FastAPI
@@ -12,6 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(recommendation_router, prefix="/api/v1/recommendations")
+app.include_router(genres_router, prefix="/api/v1/genres")
 
 
 @app.on_event("startup")
