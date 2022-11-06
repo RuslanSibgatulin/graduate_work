@@ -1,4 +1,5 @@
 import logging
+import time
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -21,7 +22,10 @@ class MongoInterface:
                 "user_id": user_id
             },
             {
-                "$set": {f"movies.{movie_id}.score": score}
+                "$set": {
+                    f"movies.{movie_id}.timestamp": int(time.time()),
+                    f"movies.{movie_id}.score": score
+                }
             },
             upsert=True
         )
