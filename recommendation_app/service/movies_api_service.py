@@ -27,6 +27,9 @@ class APIMoviesService:
         if genres:
             genre = choice(genres)
             params["filter[genre]"] = genre
+        movies = user_movies_info.get("movies")
+        if movies:
+            params["exclude"] = ";".join(list(movies.keys()))
         async with ClientSession() as session:
             async with session.get(config.url_movies_by_genre, params=params) as request:
                 json_body = await request.json()
