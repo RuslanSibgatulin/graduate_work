@@ -8,7 +8,7 @@ class Config(BaseSettings):
     mongo_port: int = 27017
     mongo_db: str = "like"
     mongo_user_collection: str = "profiles"
-    user_genres_check_url: str = "http://127.0.0.1/api/v1/auth/genres"
+    user_check_url: str = "http://127.0.0.1/api/v1/auth/check/action"
     url_movies_by_genre: str = "http://127.0.0.1/api/v1/film"
     url_movies_name: str = "http://127.0.0.1/api/v1/film/names"
     grpc_addr: str = "localhost:50051"

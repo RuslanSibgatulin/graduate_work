@@ -18,7 +18,7 @@ class MoviesService:
         self.grpc_client = GRPCModelClient
         self.api_client = APIMoviesService
 
-    async def get_movies_for(self, user_id: str) -> list[Movie]:
+    async def get_movies_for_(self, user_id: str) -> list[Movie]:
         collection = self.mongo_db[config.mongo_user_collection]
         user_movies_info = await collection.find_one({"user_id": user_id})
         if not user_movies_info:
