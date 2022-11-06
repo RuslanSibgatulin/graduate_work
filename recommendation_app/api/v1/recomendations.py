@@ -21,9 +21,6 @@ async def get_base_movies(
     user_id = user_info["user_id"]
     movies = await service.get_base_movies_for_(user_id)
     return movies
-#  Добавить учет просмотренных все то же, кроме...
-#  Жанры берем из монги + добавить ручку, чтобы класть их в монгу - пост запрос - валидация +
-#  обновление документа в коллекции, которая уже
 
 
 @router.get(
