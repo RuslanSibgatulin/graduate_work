@@ -1,4 +1,5 @@
-from fastapi.security.http import HTTPAuthorizationCredentials as BaseCredentials
+from fastapi.security.http import \
+    HTTPAuthorizationCredentials as BaseCredentials
 
 
 class HTTPAuthorizationCredentials(BaseCredentials):

@@ -6,8 +6,8 @@ from aiohttp import ClientSession
 from core.config import config
 from db.mongo import get_mongo_client
 from fastapi import Depends, HTTPException
-from motor.motor_asyncio import AsyncIOMotorClient
 from models.movies_list import Movie
+from motor.motor_asyncio import AsyncIOMotorClient
 
 logger = logging.getLogger(__name__)
 
