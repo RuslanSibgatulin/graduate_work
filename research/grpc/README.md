@@ -1,4 +1,4 @@
-# Сравнительный тест grpc, fastapi и falsk
+# Сравнительный тест grpc, fastapi и flask
 
 
 ## Компиляция .proto файла
