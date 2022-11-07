@@ -13,7 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(recommendation_router, prefix="/api/v1/recommendations")
-app.include_router(genres_router, prefix="/api/v1/genres")
+app.include_router(genres_router, prefix="/api/v1/recommendations")
 
 
 @app.on_event("startup")

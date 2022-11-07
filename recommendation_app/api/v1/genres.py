@@ -7,7 +7,7 @@ router = APIRouter(tags=["Genres"])
 
 
 @router.post(
-    "/",
+    "/genres",
     summary="Add user's genre.",
     description="Add genre to user's favorite genres list.",
     status_code=status.HTTP_200_OK,
