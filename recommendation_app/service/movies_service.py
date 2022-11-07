@@ -46,7 +46,7 @@ class MoviesService:
         recs_movie_ids = [obj_.movie_id for obj_ in recs_response.movies]
         top_movie_ids = [
             movie_id for movie_id in recs_movie_ids if movie_id not in viewed_movie_ids
-        ][:5]
+        ][:10]
         movies_data = await self.api_client.get_movies_by_id(top_movie_ids)
         return movies_data
 
