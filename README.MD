@@ -1,6 +1,7 @@
 # Дипломная работа: Рекомендательная система
 [![Generic badge](https://img.shields.io/badge/Changelog-<COLOR>.svg)](./CHANGELOG.md)
 [![Generic badge](https://img.shields.io/badge/Our-Team-<COLOR>.svg)](#команда)
+[![Generic badge](https://img.shields.io/badge/Architecture-<COLOR>.svg)](./schema.jpg)
 
 
 Этот сервис будет предлагать фильмы для пользователя и будет использовать 2 подхода в рекомендациях:

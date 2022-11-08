@@ -17,30 +17,40 @@ class MongoInterface:
     async def add_like_to_profile(
         self, user_id: str, movie_id: str, score: int
     ) -> bool:
-        result = await self.db["profiles"].update_one(
-            {
-                "user_id": user_id
-            },
-            {
-                "$set": {
-                    f"movies.{movie_id}.timestamp": int(time.time()),
-                    f"movies.{movie_id}.score": score
-                }
-            },
-            upsert=True
-        )
-        return result.acknowledged
+        try:
+            result = await self.db["profiles"].update_one(
+                {
+                    "user_id": user_id
+                },
+                {
+                    "$set": {
+                        f"movies.{movie_id}.timestamp": int(time.time()),
+                        f"movies.{movie_id}.score": score
+                    }
+                },
+                upsert=True
+            )
+            return result.acknowledged
+
+        except Exception as err:
+            logger.error(err)
+            return False
 
     async def add_view_to_profile(
         self, user_id: str, movie_id: str, timestamp: int
     ) -> bool:
-        result = await self.db["profiles"].update_one(
-            {
-                "user_id": user_id
-            },
-            {
-                "$set": {f"movies.{movie_id}.timestamp": timestamp}
-            },
-            upsert=True
-        )
-        return result.acknowledged
+        try:
+            result = await self.db["profiles"].update_one(
+                {
+                    "user_id": user_id
+                },
+                {
+                    "$set": {f"movies.{movie_id}.timestamp": timestamp}
+                },
+                upsert=True
+            )
+            return result.acknowledged
+
+        except Exception as err:
+            logger.error(err)
+            return False
