@@ -1,8 +1,9 @@
 # Дипломная работа: Рекомендательная система
-[![Generic badge](https://img.shields.io/badge/Changelog-<COLOR>.svg)](./CHANGELOG.md)
-[![Generic badge](https://img.shields.io/badge/Our-Team-<COLOR>.svg)](#команда)
-[![Generic badge](https://img.shields.io/badge/Architecture-<COLOR>.svg)](./schema.jpg)
-[![Generic badge](https://img.shields.io/badge/Miro-<COLOR>.svg)](https://miro.com/app/board/uXjVPcE9oCc=/)
+[![Changelog](https://img.shields.io/badge/Changelog-<COLOR>.svg)](./CHANGELOG.md)
+[![Team](https://img.shields.io/badge/Our-Team-<COLOR>.svg)](#команда)
+[![Schema image](https://img.shields.io/badge/Architecture-<COLOR>.svg)](./schema.jpg)
+[![Miro link](https://img.shields.io/badge/Miro-<COLOR>.svg)](https://miro.com/app/board/uXjVPcE9oCc=/)
+![CI Result](https://github.com/RuslanSibgatulin/graduate_work/actions/workflows/python.yml/badge.svg)
 
 
 Этот сервис будет предлагать фильмы для пользователя и будет использовать 2 подхода в рекомендациях:
